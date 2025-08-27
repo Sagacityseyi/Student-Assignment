@@ -10,7 +10,7 @@ assignment_router = APIRouter(prefix="/assignment", tags=["assignment"])
 
 @assignment_router.post("/", response_model=AssignmentOut)
 async def submit_assignment(
-    name: str = Form(...),   # 👈 student_name
+    name: str = Form(...), 
     subject: str = Form(...),
     description: str = Form(...),
     file: UploadFile = File(...),
