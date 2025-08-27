@@ -8,11 +8,11 @@ from services.student import student_service
 
 student_router = APIRouter(prefix="/student", tags=["student"])
 
-@student_router.post("/", response_model=StudentOut)
+@student_router.post("/", status_code=201, response_model=StudentOut)
 def register_student( student_in: StudentCreate, db:Session = Depends(get_db)):
     student_data = student_service.create_student(db, student_in)
     return student_data
 
-@student_router.get("/", response_model=List[StudentOut])
+@student_router.get("/", status_code=200, response_model=List[StudentOut])
 def get_all_student(db: Session = Depends(get_db)):
     return db.query(models.Student).all()

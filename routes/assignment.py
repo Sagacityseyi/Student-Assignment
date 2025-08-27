@@ -1,5 +1,5 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, Form, File, UploadFile
+from fastapi import APIRouter, Depends, Form, File, UploadFile, status
 from sqlalchemy.orm import Session
 import models
 from database import get_db
@@ -8,7 +8,7 @@ from services.assignment import AssignmentService
 
 assignment_router = APIRouter(prefix="/assignment", tags=["assignment"])
 
-@assignment_router.post("/", response_model=AssignmentOut)
+@assignment_router.post("/",status_code=status.HTTP_201_CREATED, response_model=AssignmentOut)
 async def submit_assignment(
     name: str = Form(...), 
     subject: str = Form(...),
@@ -24,7 +24,7 @@ async def submit_assignment(
         db=db,
     )
 
-@assignment_router.get("/", response_model=list[AssignmentOut])
+@assignment_router.get("/", status_code=status.HTTP_200_OK, response_model=list[AssignmentOut])
 def get_all_assignments(db: Session = Depends(get_db)):
     assignments = db.query(models.Assignment).all()
 
@@ -40,7 +40,7 @@ def get_all_assignments(db: Session = Depends(get_db)):
         })
     return results
 
-@assignment_router.post("/{name}/assignment")
+@assignment_router.post("/{name}/assignment", status_code=status.HTTP_200_OK, response_model=AssignmentOut)
 def get_assignment_by_name(student_name: str, db: Session = Depends(get_db)):
     assignment = AssignmentService.get_assignment_by_name(db, student_name)
     return assignment
