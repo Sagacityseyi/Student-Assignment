@@ -13,6 +13,7 @@ class Student(StudentBase):
     id: UUID
 
 class StudentOut(BaseModel):
+    id: UUID
     name: str
     email: EmailStr
 
